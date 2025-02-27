@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html>
+<!-- ICT23 Group 5 -->
+<!-- Programmed by: Regio, Medina, & Tan -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IKOT MO LA SALLE</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.css" />
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            margin: 0; 
+            padding: 0; 
+            background-color: #f4f4f4; 
+            transition: background-color 0.5s ease, color 0.5s ease; 
+        }
+
+        .darkbody {
+            background-color: #212529;
+            color: #ffffff;
+        }
+
+        .sidenav {
+            height: 100%;
+            width: 0;
+            position: fixed;
+            z-index: 10; 
+            top: 0;
+            left: 0;
+            background-color: #087830;
+            overflow-x: hidden;
+            transition: width 0.5s ease;
+            padding-top: 60px;
+        }
+
+        .sidenav a { 
+            padding: 8px 32px; 
+            font-size: 25px; 
+            color: white; 
+            display: block; 
+            transition: 0.3s; 
+            text-decoration: none; 
+            margin-bottom: 10px; 
+        }
+
+        .sidenav a:hover {
+            color: #f1f1f1; 
+            background-color: #0a90397e; 
+        }
+
+        .sidenav .closebtn { 
+            position: absolute; 
+            top: 0; 
+            right: 0px; 
+            font-size: 36px; 
+            margin-left: 50px; 
+        }
+
+        .nav-title {
+            color: white;
+            font-size: 35px;
+            font-weight: bold;
+            margin-left: 20px;
+            margin-top: -22px;
+            margin-bottom: 25px;
+        }
+
+        #main-content {
+            transition: margin-left 0.5s ease;
+            height: 100%;
+        }
+
+        #main-content.open {
+            margin-left: 300px;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 10px 20px;
+            background-color: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            z-index: 10; 
+        }
+
+        .header.dark {
+            background-color: #343a40; 
+        }
+
+        .map-title {
+            font-size: 24px;
+            font-weight: bold;
+            flex-grow: 1;
+            text-align: left;
+            margin-left: 10px;
+        }
+
+        .hamburger {
+            font-size: 30px;
+            cursor: pointer;
+            color: black; 
+            z-index: 3;
+        }
+
+        .darkbody .hamburger {
+            color: white; 
+        }
+
+        .hamburger.hide {
+            display: none;
+        }
+
+        .volume-icon {
+            font-size: 30px;
+            cursor: pointer;
+            color: black;
+            margin-right: 8px;
+        }
+
+        .darkbody .volume-icon {
+            font-size: 30px;
+            cursor: pointer;
+            color: white;
+            margin-right: 8px; 
+        }
+
+        .darkmode-icon {
+            font-size: 30px;
+            cursor: pointer;
+            color: black;
+            margin-right: 25px;
+        }
+
+        .darkbody .darkmode-icon {
+            font-size: 30px;
+            cursor: pointer;
+            color: white;
+            margin-right: 25px; 
+        }
+
+        #map {
+            height: 100vh;
+            width: 100%;
+            position: relative;
+            z-index: 1; 
+        }
+
+        .map-space {
+            margin-bottom: 15px;
+        }
+
+        .button {
+            background-color: #4CAF50; 
+            color: white; 
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px 0;
+            text-align: center;
+            width: 100%;
+        }
+
+        .button:hover { background-color: #45a049; }
+        
+        .comments-button {
+            background-color: #4CAF50; 
+            color: white; 
+            padding: 5px 8px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px 0;
+            text-align: center;
+        }
+
+        .visited { background-color: #388E3C; }
+
+        .visited-places {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            background-color: white;
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            z-index: 2;
+            max-height: 55%;
+            overflow-y: auto;
+            width: 220px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .visited-places h3 {
+            margin: 0;
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+            position: sticky; 
+            top: 0; 
+            background-color: inherit; 
+            padding: 20px; 
+            z-index: 1; 
+        }
+
+        #visitedPlacesList {
+            padding-top: 10px;
+        }
+
+        #visitedPlacesList li {
+            list-style: none;
+            padding: 5px 10px;
+            margin: 5px 0;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .remove-button {
+            background-color: transparent; 
+            color: black; 
+            border: none; 
+            cursor: pointer; 
+            font-size: 37px; 
+            transition: background-color 0.3s; 
+        }
+
+        .darkbody .remove-button {
+            color: white;
+        }
+
+        .comments-section {
+            margin-top: 10px;
+        }
+
+        .comment {
+            margin: 5px 0;
+        }
+
+        #comments-popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            z-index: 100;
+            display: none; 
+        }
+
+        .see-more {
+            color: green;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .see-more:hover {
+            text-decoration: underline;
+        }
+
+        .darkbody .header {
+            background-color: #343a40; 
+        }
+
+        .darkbody .visited-places {
+            background-color: #343a40;
+        }
+
+        .darkbody .visited-places h3 {
+            color: #ffffff; 
+        }
+
+        .darkbody #comments-popup {
+            background-color: #343a40; 
+            color: white;
+        }
+
+        #comments-popup .notification {
+            color: green; 
+            font-size: 12px; 
+            font-style: italic; 
+        }
+
+        .darkbody #visitedPlacesList li {
+            background-color: #495057;
+            color: #ffffff;
+        }
+
+        .darkbody #visitedPlacesList li:hover {
+            background-color: #6c757d;
+        }
+
+        .darkbody #map {
+            background-color: #212529;
+        }
+
+        .modal-content {
+            background-color: white; 
+            color: black; 
+        }
+
+        .darkbody .modal-content {
+            background-color: #343a40; 
+            color: white; 
+        }
+        
+        .darkbody .leaflet-popup-content-wrapper {
+            background-color: #6c757d; 
+            color: white; 
+        }
+
+        .darkbody .leaflet-popup-content {
+            color: white; 
+        }
+
+        .darkbody .leaflet-popup-tip {
+            background-color: #6c757d; 
+        }
+        
+        .leaflet-routing-container, 
+        .leaflet-popup-content-wrapper { 
+            transition: background-color 0.5s ease, color 0.5s ease;
+        }
+
+        .darkbody .leaflet-routing-container,
+        .darkbody .leaflet-popup-content-wrapper {
+            background-color: #343a40; 
+            color: #fff; 
+        }
+
+        .leaflet-routing-container {
+            border: 1px solid #ccc; 
+            border-radius: 5px; 
+        }
+
+        .popup-image {
+            max-width: 100%; 
+            height: auto;
+            margin-bottom: 10px; 
+        }
+
+        .darkbody .leaflet-control-zoom {
+            background-color: #343a40; 
+            color: grey; 
+        }
+
+        .darkbody .leaflet-control-zoom a {
+            background-color: #343a40;
+            color: grey; 
+        }
+
+        .darkbody .leaflet-control-zoom a:hover {
+            background-color: #6c757d;
+            color: grey; 
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <span class="hamburger" id="hamburger" onclick="openNav()">☰</span>
+        <div class="map-title" id="title">IKOT MO LA SALLE</div>
+        <span id="music-icon" class="volume-icon" onclick="toggleMusic()">♬</span>
+        <span id="dark-icon" class="darkmode-icon" onclick="toggleDarkMode()">☼</span>
+    </div>
+
+    <script src="audio.js"></script>
+    <script src="darkmode.js"></script>
+
+    <div id="mySidenav" class="sidenav">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+        <div class="nav-title">IKOT MO <br>LA SALLE</div>
+        <a href="IMLS-About.html">About</a>
+        <a href="IMLS-Contacts.html">Developers</a>
+        <a href="IMLS-Feedback.html">Reviews</a>
+        <a href="IMLS-Tutorial.html">Tutorial</a>
+    </div>
+
+    <div id="main-content"></div>
+    <div id="map"></div>
+    <div class="visited-places">
+        <h3>Visited Places</h3>
+        <ul id="visitedPlacesList"></ul>
+    </div>
+
+    <div id="comments-popup">
+        <h3>Comments</h3>
+        <ul id="popup-comment-list"></ul>
+        <input type="text" id="popup-comment-input" placeholder="Add a comment...">
+        <button onclick="addCommentToPopup(currentLocationIndex)" class="comments-button">Add Comment</button>
+        <button onclick="closeCommentsPopup()" class="comments-button">Close</button> 
+        <div class="notification" id="comment-notification" style="display:none;">Comment successfully submitted</div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
+    <script>
+        var map = L.map('map', {
+            center: [14.326870353517993, 120.95749008011421],
+            zoom: 16,
+            minZoom: 16,
+            maxZoom: 19
+        });
+
+        var lightTileLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map); 
+
+        var darkTileLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+            maxZoom: 19,
+            attribution: '© OpenStreetMap contributors, © CartoDB'
+        });
+
+        var currentTileLayer = lightTileLayer;
+
+        var userIcon = L.icon({
+            iconUrl: 'UserIcon.png',
+            iconSize: [40, 40],
+            iconAnchor: [15, 40], 
+            popupAnchor: [0, -40] 
+        });
+
+        var userMarker;
+
+        function addUserLocation(lat, lng) {
+            if (userMarker) {
+                map.removeLayer(userMarker);
+            }
+            userMarker = L.marker([lat, lng], { icon: userIcon })
+                    .addTo(map)
+                    .bindPopup("You're Here")
+                    .openPopup();
+        }
+
+        function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    var userLat = position.coords.latitude;
+                    var userLng = position.coords.longitude;
+
+                    map.setView([userLat, userLng], 16);
+                    addUserLocation(userLat, userLng);
+                }, function(error) {
+                    alert("Unable to retrieve your location." + error.message);
+                });
+            } else {
+                alert("Geolocation is not supported by this browser.");
+            }
+        }
+
+        getLocation();
+
+        var locations = [
+            { name: "Gate 3", coordinates: [14.328043479176957, 120.95689778177007], info: "3rd gate of the campus.", imageUrl: "Places-Gate3.jpg", extraInfo: "Also known as the Magdiwang gate, it is an entry and exit point for vehicles and is the nearest point of entry from the Aguinaldo Highway. It is located near Dasmariñas Park.", comments: []},
+            { name: "Gate 4", coordinates: [14.32039336706152, 120.9637023923179], info: "4th gate of the campus.", imageUrl: "Places-Gate4.jpg", extraInfo: "Gate 4 serves as an auxiliary entry and exit point for vehicles and is the gate closest to the PCH, COS, and Ayuntamiento Buildings.", comments: []},
+            { name: "Gate 1", coordinates: [14.321625014814478, 120.96359992271027], info: "1st gate of the campus.", imageUrl: "Places-Gate1.jpg", extraInfo: "The main entrance of DLSU-D for students and personnel. The main landmark is the statue of St. La Salle at the center of the rotunda.", comments: []},
+            { name: "Gate 2", coordinates: [14.322512605828592, 120.96347664319036], info: "2nd gate of the campus.", imageUrl: "Places-Gate2.jpg", extraInfo: "Gate 2 serves as one of the entry and exit points of De La Salle University-Dasmariñas for vehicles. It is the gate nearest Dasmariñas Bagong Bayan (area).", comments: []},
+            { name: "Aklatang Emilio Aguinaldo", coordinates: [14.320707361373156, 120.96195550193971], info: "The main library for student resources and study.", imageUrl: "Places-Aklatang Emilio Aguinaldo.jpg", extraInfo: "The old Aklatan Building is a replica of Emilio Aguinaldo’s home in Kawit, Cavite and is now being used by the Office of the President and the Audio Visual Collection of the University. The old building also features two viewing rooms – the Luis Aguado and Eugenio Cabeza Rooms for viewing and seminars. The new building houses the University’s collection of books, periodicals, journals, and other databases to aid research and serves as a conducive venue for students to study and complete their school requirements.", comments: []},
+            { name: "De La Salle University - Dasmariñas Admin Building", coordinates: [14.320566079262692, 120.96307328510649], info: "Administration offices and services.", imageUrl: "Places-Admin Building.jpg", extraInfo: "This structure was built to become the new home of student organizations in De La Salle University-Dasmariñas. In line with the vision of Brother President Augustine Boquer, the building will be completely funded by donations from sponsors.", comments: []},
+            { name: "Ugnayang La Salle", coordinates: [14.32673484037655, 120.95747193787933], info: "Place for student activities and organizations.", imageUrl: "Places-Ugnayang La Salle.jpg", extraInfo: "Formerly the Palaruang La Salle which was a major venue of sports activities, the Ugnayang La Salle is now known as one of Cavite’s premiere locations for large events such as seminars, awarding and commencement rites.", comments: []},
+            { name: "De La Salle University - Dasmariñas Grandstand", coordinates: [14.324974408992704, 120.95758356653086], info: "The Grandstand for events and activities.", imageUrl: "Places-Grandstand.jpg", extraInfo: "The DLSU-D Grandstand provides a place for audiences to watch sporting events as they happen. It is also occasionally used as a venue for alternative classes when faculty and students opt to go outdoors for a different learning atmosphere.", comments: []},
+            { name: "De La Salle University - Dasmariñas Oval", coordinates: [14.32525891237552, 120.95814549804919], info: "Oval area for student gatherings.", imageUrl: "Places-Oval.jpg", extraInfo: "Situated near Ugnayang La Salle, the track oval is available for use by the University’s students and personnel for exercise and training. The football field also provides a location for student athletes to train during the weekdays.", comments: []},
+            { name: "De La Salle University - Dasmariñas High School Complex", coordinates: [14.3256195717407, 120.95910248381733], info: "High School buildings and facilities.", imageUrl: "Places-HighSchoolComplex.jpg", extraInfo: "The newly constructed buildings provide a separate campus for the school's High School students. Aside from classrooms and laboratories, it has its canteen, bookstore, and clinic to cater to the needs of the students.", comments: []},
+            { name: "Buhay Pag-Asa Center for Streetchildren", coordinates: [14.326367099398768, 120.95652114269025], info: "Center for streetchildren support.", imageUrl: "Places-BuhayPag-Asa.jpg", extraInfo: "This transformation facility is part of the University’s advocacies to provide an alternative to detention centers to administer formation programs for youth in conflict with the law.", comments: []},
+            { name: "Retreat and Conference Center", coordinates: [14.327522213890568, 120.95668436540421], info: "Venue for retreats and conferences.", imageUrl: "Places-RetreatConferenceCenter.jpg", extraInfo: "The facility also features accommodations for big groups making it a perfect location for spiritual activities.", comments: []},
+            { name: "Our Lady of the Most Holy Rosary Chapel - De La Salle University Dasmariñas", coordinates: [14.320702310868663, 120.96151750000622], info: "Chapel for religious services.", imageUrl: "Places-Chapel.jpg", extraInfo: "Part of the Br. Gus Boquer FSC Cultural Heritage Complex is the University Chapel where spiritual activities and masses are held by the University.", comments: []},
+            { name: "Museo De La Salle", coordinates: [14.321022295668621, 120.96117350669999], info: "Museum showcasing the history of DLSU-D.", imageUrl: "Places-MuseoDeLaSalle.jpg", extraInfo: "It houses collections of items and relics from the 19th century Ilustrado period.", comments: []},
+            { name: "University Square", coordinates: [14.321507904851629, 120.95994142573556], info: "Food courts for dining and relaxation.", imageUrl: 'Places-University Square.jpg', extraInfo: "The University Square, also known as the Square Canteen marks the center of the East and West Campus and is known as the food hub of the University where various concessionaires offer a wide array of delicious treats to satisfy the community’s tastes.", comments: []},
+            { name: "Gregorio Montoya Hall", coordinates: [14.322856156364232, 120.9591606729335], info: "Lecture halls and classrooms.", imageUrl: "Places-GregorioMontoyaHall.jpg", extraInfo: "", comments: []},
+            { name: "College of Business Administration and Accountancy", coordinates: [14.32372162007891, 120.95823724052495], info: "Building for business-related courses.", imageUrl: "Places-CBAA.jpg", extraInfo: "Considered as one of the main buildings in the West Campus, the College of Business Administration and Accountancy (CBAA) is where students specializing in business, management, marketing, and accountancy for undergraduate and graduate programs hold their classes and activities. It has its own laboratory too.", comments: []},
+            { name: "DLSU-D Clothing Warehouse", coordinates: [14.32331558080594, 120.95833924024407], info: "Clothing warehouse for students.", imageUrl: "Places-ClothingWarehouse.jpg", extraInfo: "Located across from the Gregorio Montoya Hall, the Warehouse office is where the University’s inventory of supplies is stored. It also has a transaction area where students can purchase uniforms, thesis papers, and other official merchandise.", comments: []},
+            { name: "Mariano Trias Hall Building", coordinates: [14.323714243451287, 120.95881228189491], info: "Building for various departments.", imageUrl: "Places-MarianoTriasHallBuilding.jpg", comments: []},
+            { name: "MTH Court", coordinates: [14.323280711250872, 120.95888129396486], info: "A court located in front of the CBAA building and is known for where most sports events take place.", imageUrl: "Places-MTHCourt.jpg", comments: []},
+            { name: "Candido Tirona Hall", coordinates: [14.323280687491543, 120.9593984292228], info: "The Candido Tirona Hall are the connected buildings being used by the College of Engineering, Architecture and Technology.", imageUrl: "Places-CandidoTironaHall.jpg", extraInfo: "It features laboratories and workshops, as well as facilities for engineering and architecture classes.", comments: []},
+            { name: "CEAT Building", coordinates: [14.3228530320671, 120.95852312612841], info: "A modern facility dedicated to fostering excellence in engineering, architecture, and technology education.", imageUrl: "Places-CEATBuilding.jpg", extraInfo: "Equipped with specialized classrooms, advanced laboratories, and design studios, the building supports hands-on learning and innovation. It provides students with the tools and resources needed to develop technical skills and engage in practical, real-world applications of their studies, making it a cornerstone for the university's STEM programs.", comments: []},
+            { name: "Vito Belarmino Hall", coordinates: [14.32219405184463, 120.95920374059268], info: "A key academic building featuring spacious classrooms, lecture halls, and meeting rooms.", imageUrl: "Places-VitoBelarminoHall.jpg", comments: []},
+            { name: "College of Education", coordinates: [14.322381851428355, 120.95966604830414], info: "The Felipe Calderon Hall is one of the buildings being used by the College of Education (COEd).", imageUrl: "Places-CollegeofEducation.jpg", extraInfo: "It is a one-storey structure that houses classrooms and offices of the COEd and the Faculty Association.", comments: []},
+            { name: "College of Criminal Justice Education", coordinates: [14.322578874758566, 120.95977130847025], info: "The college offers a comprehensive learning environment with specialized classrooms, laboratories, and simulation facilities that prepare students for careers in public safety, legal services, and criminological research.", imageUrl: "Places-CollegeofCriminalJusticeEducation.jpg", comments: []},
+            { name: "University Dormitories", coordinates: [14.320903175153664, 120.95977800241413], info: "Situated near the University Square, DLSU-D offers dormitory facilities for both male and female students.", imageUrl: "Places-Dormitories.jpg", extraInfo: "The dorms are managed by the Matron’s Office and are reserved on a first-come, first-served basis at the beginning of the school year.", comments: []},
+            { name: "Severino de las Alas Hall", coordinates: [14.322698556425427, 120.96108381848808], info: "Also known as the Alumni Building.", imageUrl: 'Places-Severino De Las Alas.png', extraInfo: "It houses the office of DLSU-D Alumni Association and the Risk, Compliance and Audit Office on the first floor as well as conference rooms, a multi-purpose hall and auditorium for University assemblies and events.", comments: []},
+            { name: "Hotel Rafael", coordinates: [14.322267453364795, 120.96181426927465], info: "Hotel Rafael is a hotel situated within the DLSU-D campus.", imageUrl: "Places-HotelRafael.jpg", extraInfo: "DLSU-D makes this accommodation available to faculty and students, as well as delegates of major workshops and events in venues within the University.", comments: []},
+            { name: "ICTC Building", coordinates: [14.322332916762798, 120.96294592530414], info: "Also situated near Gate 2, this two-storey building is home to the ICT Center on the first floor and laboratories of the Computer Studies Center on the second floor.", imageUrl: "Places-ICTCBuilding.jpg", comments: []},
+            { name: "College of Tourism and Hospitality Management Building", coordinates: [14.321921962917726, 120.9626321865222], info: "This architectural landmark is situated in the East Campus and is one of the biggest college buildings in DLSU-D.", imageUrl: "Places-CTHM.jpg", extraInfo: "It houses the College of Tourism and Hospitality Management as well as event venues like the Salreal Ballroom and the CTHM Courtyard.", comments: []},
+            { name: "Mariano Alvarez Hall", coordinates: [14.322056518438824, 120.96298400873715], info: "One of the first buildings you will encounter as you move towards the East Campus is the Mariano Alvarez Hall.", imageUrl: "Places-MarianoAlvarezHall.jpg", extraInfo: "This building houses the Buildings and Facilities Maintenance Office (BFMO).", comments: []},
+            { name: "Cafe Museo", coordinates: [14.321277319615898, 120.96102434309933], info: "A cafe that holds a vintage aesthetic, famous to college students where they often go during break time. They serve coffee, juice, salad, rice meals, and more.", imageUrl: "Places-CafeMuseo.jpg", comments: []},
+            { name: "College of Liberal Arts and Communication Building", coordinates: [14.321046776709125, 120.9629112470949], info: "The Julian Felipe Hall is the home of the College of Liberal Arts and Communication.", imageUrl: "Places-CollegeOfLiberalArtsAndCommunication.jpg", extraInfo: "Aside from classrooms, the building also has a radio laboratory, a media studio and speech laboratories for communication and liberal art students.", comments: []},
+            { name: "College of Science and Computer Studies Building", coordinates: [14.320265618282098, 120.96295517613069], info: "The College of Science and Computer Studies (CSCS) building at De La Salle University – Dasmariñas is a modern, state-of-the-art facility designed to support STEM education and research.", imageUrl: "Places-CollegeofScienceAndComputerStudies.jpg", extraInfo: "It features spacious classrooms, advanced laboratories, and cutting-edge computer labs, providing students with the resources for hands-on learning and innovation. The building’s eco-friendly design and collaborative spaces create an inspiring environment for students to explore and excel in science and technology.", comments: []},
+            { name: "High School Chapel", coordinates: [14.326042006780902, 120.95922192403046], info: "A separate chapel for the Senior High School Complex and is also known as the Chapel of St. John Baptist De La Salle Universal Patron Saint of Teachers.", imageUrl: "Places-HighSchoolChapel.jpg", comments: []},
+            { name: "University Clinic", coordinates: [14.322951676673265, 120.95893008477721], info: "A dedicated healthcare facility that provides comprehensive medical services to students, faculty, and staff.", imageUrl: "Places-UniversityClinic.jpg", comments: []},
+            { name: "National Bookstore", coordinates: [14.325997864325554, 120.95874684665318], info: "This building caters to school supply needs of the Lasallian community in the East Campus.", imageUrl: "Places-NationalBookstore.jpg", extraInfo: "Located near the JFH and PCH Buildings, it is a quick landmark to spot from the entrance. The building also caters to the office of the Lasallian Community Development Center (LCDC) on the second floor.", comments: []}
+        ];
+
+        var visitedPlaces = [];
+        var currentRoute;
+        var currentLocationIndex;
+
+        function openNav() {
+            document.getElementById("mySidenav").style.width = "300px";
+            document.getElementById("main-content").classList.add("open");
+            document.getElementById("hamburger").classList.add("hide");
+        }
+
+        function closeNav() {
+            document.getElementById("mySidenav").style.width = "0";
+            document.getElementById("main-content").classList.remove("open");
+            document.getElementById("hamburger").classList.remove("hide");
+        }
+
+        var audio = document.createElement('audio');
+        audio.src = "IMLS Webpage Music.mp3"; 
+        audio.loop = true;
+
+        function setInitialMusicState() {
+            if (localStorage.getItem("musicState") === "playing") {
+                audio.play();
+                document.getElementById("music-icon").innerHTML = "♬"; 
+            } else {
+                audio.pause();
+                document.getElementById("music-icon").innerHTML = "♪"; 
+            }
+        }
+
+        function toggleMusic() {
+            if (audio.paused) {
+                audio.play();
+                document.getElementById("music-icon").innerHTML = "♬"; 
+                localStorage.setItem("musicState", "playing");
+            } else {
+                audio.pause();
+                document.getElementById("music-icon").innerHTML = "♪"; 
+                localStorage.setItem("musicState", "paused");
+            }
+        }
+
+        function toggleDarkMode() {
+            const body = document.body;
+            const isDarkMode = body.classList.toggle('darkbody');
+            const darkIcon = document.getElementById('dark-icon');
+            darkIcon.innerText = isDarkMode ? '☾' : '☼';
+
+            if (isDarkMode) {
+                map.removeLayer(lightTileLayer);
+                map.addLayer(darkTileLayer);
+                currentTileLayer = darkTileLayer;
+                localStorage.setItem("darkMode", "enabled"); 
+            } else {
+                map.removeLayer(darkTileLayer);
+                map.addLayer(lightTileLayer);
+                currentTileLayer = lightTileLayer;
+                localStorage.setItem("darkMode", "disabled"); 
+            }
+        }
+
+        function applyDarkModeOnLoad() {
+            if (localStorage.getItem("darkMode") === "enabled") {
+                document.body.classList.add('darkbody');
+                map.removeLayer(lightTileLayer);
+                map.addLayer(darkTileLayer);
+                currentTileLayer = darkTileLayer;
+                document.getElementById('dark-icon').innerText = '☾'; 
+                document.querySelector('.hamburger').style.color = 'white'; 
+            } else {
+                map.removeLayer(darkTileLayer);
+                map.addLayer(lightTileLayer);
+                currentTileLayer = lightTileLayer;
+                document.getElementById('dark-icon').innerText = '☼'; 
+                document.querySelector('.hamburger').style.color = 'black'; 
+            }
+        }
+
+        applyDarkModeOnLoad();
+
+        var campusBoundary = [
+            [14.328296598360886, 120.95705481842651],
+            [14.328152080410243, 120.95710808901988],
+            [14.327761881478441, 120.95710808901988],
+            [14.327669747576522, 120.95755424854833],
+            [14.32756671480812, 120.95763137297187],
+            [14.32733750375693, 120.95793059037717],
+            
+            [14.327175500185021, 120.95820795219488],
+            [14.326987961449856, 120.9583374171111],
+            [14.326711853242388, 120.95851171171608],
+            [14.32670385483074, 120.95858875971493],
+            [14.32686382300921, 120.95889970342449],
+            [14.326274606321503, 120.95937299827452],
+            
+            [14.325842393050246, 120.95968840082791],
+            [14.325614824168902, 120.95977572514742],
+            [14.325312121391326, 120.95979872829655],
+            [14.325072823658365, 120.95951375485106],
+            [14.32473841998864, 120.95929210883793],
+            [14.32452366507553, 120.95934277078378],
+            [14.324330385472958, 120.95942509644551],
+            
+            [14.323892400946608, 120.95976309763917],
+            [14.323283946645745, 120.96013219325961],
+            [14.32290304315943, 120.96032842666745],
+            [14.322797780536161, 120.96039418212405],
+            [14.323121878455057, 120.9609974169648],
+            [14.322905813224256, 120.96123184945871],
+            
+            [14.322465371924448, 120.96166640725872],
+            [14.322429360962104, 120.96184937896153],
+            [14.322562324482698, 120.9634904064322],
+            [14.32040804217638, 120.96375425349952],
+            [14.320273187705153, 120.9637820893061],
+            [14.320247235115339, 120.9634913194393],
+            
+            [14.320148478094364, 120.96349936606585],
+            [14.320130286006806, 120.96311312796522],
+            [14.320203706787098, 120.96308366442219],
+            [14.320156548312049, 120.96246087098253],
+            [14.320305433256442, 120.96108100972808],
+            [14.3203502774157, 120.96088496755824],
+            [14.32062381362774, 120.96064150903692],
+            
+            [14.320397958065845, 120.95868607091965],
+            [14.320520923901068, 120.95866535104547],
+            [14.32057864253517, 120.9587508205264],
+            [14.32083963095631, 120.95878190033763],
+            [14.32100525807086, 120.95910564837102],
+            [14.321015296085983, 120.95914967810627],
+            
+            [14.321547309588142, 120.95947083615569],
+            [14.321680312766615, 120.95944752629725],
+            [14.32184593926672, 120.95913672818563],
+            [14.322336843659203, 120.95866126959687],
+            [14.322457298947619, 120.95859393000585],
+            [14.32243220410119, 120.9583427015317],
+            
+            [14.322502469664094, 120.95813032282162],
+            [14.322512507599857, 120.95809406304184],
+            [14.323064593386652, 120.95783765460058],
+            [14.323348164188761, 120.95782470467923],
+            [14.323817435446463, 120.95780139482365],
+            [14.323990588760761, 120.95777549498094],
+            [14.324429745134225, 120.95757865617823],
+            
+            [14.32545360349072, 120.9567136014374],
+            [14.325744699630217, 120.95667475167377],
+            [14.32583503973054, 120.95659705214568],
+            [14.325915342011383, 120.95633546373446],
+            [14.326343920606632, 120.9560817547418],
+            [14.326492052036645, 120.95609516578627],
+            
+            [14.326774021241695, 120.95615953880201],
+            [14.326987173754, 120.95615093262849],
+            [14.327193511336802, 120.95609071498825],
+            [14.32745036242944, 120.95605001231999],
+            [14.327539370800517, 120.95609695097805],
+            [14.327879416473163, 120.95648729874497],
+            
+            [14.328003950807284, 120.95658444525603],
+            [14.328170479166747, 120.95662629298319],
+            [14.328225505900406, 120.95681610232312]
+        ];
+
+        var campusBoundaryLayer = L.polygon(campusBoundary, {
+            color: 'green',
+            weight: 2,
+            opacity: 0.7,
+            title: "Campus Boundary" 
+        }).addTo(map);
+
+        locations.forEach(function (location, index) {
+            var locationIcon = L.icon({
+                iconUrl: 'Markers.png',
+                iconSize: [40, 40],
+                iconAnchor: [15, 40], 
+                popupAnchor: [0, -40] 
+            });
+
+            var marker = L.marker(location.coordinates, { icon: locationIcon }).addTo(map); 
+            marker.bindPopup(
+                `<h3>${location.name}</h3>
+                <img src="${location.imageUrl}" alt="${location.name}" class="popup-image">
+                <p>${location.info} <span class="see-more" id="see-more-${index}" onclick="toggleInfo(${index})">See More Info</span></p>
+                <div id="info-${index}" class="info-content" style="display: none;">${location.extraInfo}</div>
+                <button class="button" onclick="getDirections(${index})">Get Directions</button>
+                <button class="button" id="visited-button-${index}" onclick="toggleVisited(${index})">Mark as Visited</button>
+                <button class="button" onclick="toggleComments(${index})">See Comments</button>
+                <div id="comments-${index}" class="comments-section" style="display:none">
+                    <ul id="commentList-${index}"></ul>
+                    <input type="text" id="comment-input-${index}" placeholder="Add a comment...">
+                    <button class="add-comment-button" onclick="addComment(${index})">Add Comment</button>
+                </div>`
+            );
+        });
+
+        function toggleInfo(index) {
+            var info = document.getElementById(`info-${index}`);
+            var button = document.getElementById(`see-more-${index}`);
+            if (info.style.display === "none" || info.style.display === "") {
+                info.style.display = "block";
+                button.style.display = "none";
+                var showLessButton = document.createElement('span');
+                showLessButton.textContent = 'Show Less';
+                showLessButton.classList.add('see-more');
+                showLessButton.onclick = function() {
+                    toggleInfo(index);
+                };
+                info.appendChild(showLessButton);
+            } else {
+                info.style.display = "none";
+                button.style.display = "inline";
+            }
+        }
+
+        function toggleVisited(index) {
+            var place = locations[index].name;
+            var currentDate = new Date().toLocaleString();
+            var visitedButton = document.getElementById(`visited-button-${index}`);
+            
+            if (visitedPlaces.some(item => item.name === place)) {
+                visitedPlaces = visitedPlaces.filter(item => item.name !== place);
+                visitedButton.innerHTML = "Mark as Visited";
+                alert(place + " has been unmarked as visited.");
+            } else {
+                visitedPlaces.push({ name: place, date: currentDate });
+                visitedButton.innerHTML = "Unmark as Visited";
+                alert(place + " has been marked as visited.");
+            }
+
+            updateVisitedPlacesList();
+        }
+
+        function updateVisitedPlacesList() {
+            var list = document.getElementById('visitedPlacesList');
+            list.innerHTML = ''; 
+            visitedPlaces.forEach(function(placeObj) {
+                var li = document.createElement('li');
+                li.textContent = `${placeObj.name} - Visited on ${placeObj.date}`;
+                var removeButton = document.createElement('button');
+                removeButton.innerHTML = '×'; 
+                removeButton.classList.add('remove-button');
+                removeButton.onclick = function() {
+                    visitedPlaces = visitedPlaces.filter(item => item !== placeObj);
+                    updateVisitedPlacesList(); 
+                    var visitedButton = document.getElementById(`visited-button-${locations.findIndex(loc => loc.name === placeObj.name)}`);
+                    visitedButton.innerHTML = "Mark as Visited";
+                };
+                li.appendChild(removeButton);
+                list.appendChild(li);
+            });
+        }
+
+        function getDirections(index) {
+            var location = locations[index];
+
+            if (currentRoute) {
+                map.removeControl(currentRoute);
+            }
+            
+            navigator.geolocation.getCurrentPosition(function(position) {
+                var start = [position.coords.latitude, position.coords.longitude];
+
+                var waypoints = [
+                    L.latLng(start),
+                    L.latLng(location.coordinates)
+                ];
+
+                currentRoute = L.Routing.control({
+                    router: L.Routing.osrmv1({
+                        serviceUrl: 'https://router.project-osrm.org/route/v1',
+                        profile: 'driving' 
+                    }),
+                    waypoints: waypoints,
+                    routeWhileDragging: true,
+                    createMarker: function() { return null; }, 
+                }).addTo(map);
+                
+                var directionsModal = document.getElementById('get-directions-modal');
+                directionsModal.style.display = 'block';
+
+                if (document.body.classList.contains('darkbody')) {
+                    directionsModal.querySelector('.modal-content').classList.add('darkbody');
+                } else {
+                    directionsModal.querySelector('.modal-content').classList.remove('darkbody');
+                }
+            }, function(error) {
+                alert("Unable to retrieve your location." + error.message);
+            });
+        }
+
+        function toggleComments(index) {
+            currentLocationIndex = index; 
+            displayCommentsForPopup(index);
+            var commentsPopup = document.getElementById('comments-popup'); 
+        
+            if (commentsPopup.style.display === 'block') {
+                closeCommentsPopup(); 
+            } else {
+                commentsPopup.style.display = 'block'; 
+            }
+        
+            map.on('popupclose', function(e) {
+                closeCommentsPopup(); 
+            });
+        }
+
+        function closeCommentsPopup() {
+            document.getElementById('comments-popup').style.display = 'none';
+        }
+
+        function loadComments() {
+            const comments = JSON.parse(localStorage.getItem('comments')) || [];
+            comments.forEach(({ rating, comment }) => {
+                addCommentToList(rating, comment);
+            });
+        }
+
+        function addCommentToList(rating, comment) {
+            const li = document.createElement('li');
+            li.innerHTML = `Anonymous User: ${getStarIcons(rating)} - ${comment}`; 
+            const hr = document.createElement('hr'); 
+            li.appendChild(hr); 
+            commentsList.appendChild(li);
+        }
+
+        function saveComments() {
+            const comments = JSON.parse(localStorage.getItem('comments')) || [];
+            comments.push({ rating: ratingValue, comment: document.getElementById('comment').value });
+            localStorage.setItem('comments', JSON.stringify(comments));
+        }
+
+        function displayComments(index) {
+            var commentList = document.getElementById(`commentList-${index}`);
+            commentList.innerHTML = ''; 
+            locations[index].comments.forEach(function(comment) {
+                var li = document.createElement('li');
+                li.classList.add('comment');
+                li.textContent = comment;
+                commentList.appendChild(li);
+            });
+        }
+
+        function displayCommentsForPopup(index) {
+            var commentList = document.getElementById('popup-comment-list');
+            commentList.innerHTML = ''; 
+            locations[index].comments.forEach(function(comment) {
+                var li = document.createElement('li');
+                li.classList.add('comment');
+                li.textContent = comment;
+                commentList.appendChild(li);
+            });
+        }
+
+        function addCommentToPopup(index) {
+            var commentInput = document.getElementById('popup-comment-input');
+            if (commentInput.value) {
+                locations[index].comments.push("Anonymous User: " + commentInput.value);
+                displayCommentsForPopup(index);
+                commentInput.value = '';
+                
+                var notification = document.getElementById('comment-notification');
+                notification.style.display = 'block'; 
+                setTimeout(function() {
+                    notification.style.display = 'none'; 
+                }, 2000);
+            }
+        }
+
+        function initializeCommentsPopup() {
+            var commentsPopup = document.getElementById('comments-popup');
+            commentsPopup.style.display = 'none'; 
+        }
+
+        setInitialMusicState();
+        initializeCommentsPopup();
+
+        document.getElementById('submit').addEventListener('click', () => {
+            const comment = document.getElementById('comment').value;
+
+            if (ratingValue > 0 && comment.trim() !== '') {
+                saveComments(); 
+                addCommentToList(ratingValue, comment);
+                document.getElementById('comment').value = '';
+                ratingValue = 0; 
+
+                notification.textContent = 'Thank you for your feedback!';
+                setTimeout(() => {
+                    notification.textContent = '';
+                }, 3000); 
+            } else {
+                alert('Please provide a rating and a comment.');
+            }
+        });
+    </script>
+</body>
+</html>

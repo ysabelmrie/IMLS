@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<!-- ICT23 Group 5 -->
+<!-- Programmed by: Medina & Tan -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IKOT MO LA SALLE</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            transition: background-color 0.5s, color 0.5s; 
+        }
+
+        .darkbody {
+            background-color: #202020;
+            color: white;
+        }
+
+        .header-section {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: #087830;
+            color: white;
+            padding: 20px;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between; 
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            box-sizing: border-box;
+        }
+
+        .header-text {
+            flex-grow: 1;
+            text-align: center;
+        }
+
+        .header-section h1 {
+            margin: 0;
+            font-size: 32px;
+        }
+
+        .header-section p {
+            margin-top: 5px;
+            font-size: 18px;
+        }
+
+        .home-button {
+            background-color: #087830;
+            color: white;
+            border: none;
+            padding: 15px 20px;
+            font-size: 24px;
+            cursor: pointer;
+            border-radius: 8px;
+            position: fixed; 
+            top: 20px;
+            left: 20px;
+            z-index: 1001;
+            display: flex;
+            align-items: center;
+            transition: background-color 0.3s, transform 0.2s; 
+        }
+
+        .home-button i {
+            font-size: 45px;
+            margin-right: 10px;
+        }
+
+        main {
+            padding: 20px;
+            margin-top: 120px;
+            margin-left: 30px; 
+            margin-right: 30px; 
+            max-width: 80%;
+        }
+
+        h2 {
+            color: #087830; 
+        }
+
+        .tutorial-btn {
+            background-color: #087830; 
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 10px 0;
+            cursor: pointer;
+            font-size: 1em;
+            border-radius: 5px;
+            transition: background-color 0.3s, transform 0.2s; 
+        }
+
+        .tutorial-btn:hover {
+            background-color: #065c26; 
+            transform: scale(1.05); 
+        }
+
+        footer {
+            background-color: #087830; 
+            color: white;
+            text-align: center;
+            padding: 10px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            padding-top: 100px;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 600px;
+        }
+
+        .modal-content.darkbody {
+            background-color: #1e1e1e;
+            color: white; 
+        }
+
+        .close-btn {
+            color: #aaa;
+            float: right ;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close-btn:hover,
+        .close-btn:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .tutorial-section {
+            margin-bottom: 20px;
+        }
+
+        .tutorial-section ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .tutorial-section li {
+            margin: 10px  0;
+        }
+
+        .tutorial-section ul li button {
+            width: 100%;
+            background-color: #087830; 
+            color: white;
+            padding: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            transition: background-color 0.3s, transform 0.2s; 
+        }
+
+        .tutorial-section ul li button:hover {
+            background-color: #065c26; 
+            transform: scale(1.05); 
+        }
+
+        .modal-image {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+            max-width: 100%;
+            max-height: 400px; 
+            display: block;
+            margin: 0 auto;
+        }
+
+        #virtual-markers-modal .modal-image {
+            max-height: 300px; 
+        }
+
+        body.dark-mode {
+            background-color: #121212;
+            color: white;
+        }
+
+        h2.dark-mode {
+            color: white; 
+        }
+
+        .tutorial-btn.dark-mode {
+            background-color: #1e1e1e;
+            color: white;
+        }
+
+        .tutorial-btn.dark-mode:hover {
+            background-color: #2a2a2a;
+        }
+
+        .modal-content.dark-mode {
+            background-color: #1e1e1e;
+            color: white; 
+        }
+
+        .close-btn.dark-mode {
+            color: white;
+        }
+
+        #dark-mode-toggle {
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            font-size: 36px;
+            color: white;
+        }
+
+        #volume-icon {
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            font-size: 36px;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="header-section">
+        <div class="header-text">
+            <h1>How to Utilize the Page</h1>
+            <p>Learn how to navigate Ikot Mo La Salle</p>
+        </div>
+        <button id="dark-mode-toggle"><i class="fa fa-sun-o"></i></button>
+        <button id="volume-icon"><i class="fa fa-music"></i></button>
+    </div>
+
+    <a href="IMLS-MainMap.html">
+        <button class="home-button">
+            <i class="fa fa-home"></i>
+        </button>
+    </a>
+
+    <main>
+        <section id="introduction" class="tutorial-section">
+            <h2 class="green-text">1. Virtual Markers of Locations in DLSU-D</h2>
+            <p>The map has markers at specific locations around DLSU-D. Click on the markers to view more details about each location.</p>
+            <button class="tutorial-btn" data-modal="virtual-markers-modal">Learn More About Markers</button>
+        </section>
+        
+        <section id="get-directions" class="tutorial-section">
+            <h2 class="green-text">2. Get Directions</h2>
+            <p>Each marker has a "Get Directions" feature. When you click on a marker and Get directions, it provides a link to Google Maps to guide you to that location.</p>
+            <button class="tutorial-btn" data-modal="get-directions-modal">Learn More About Directions</button>
+        </section>
+        
+        <section id="mark-visited" class="tutorial-section">
+            <h2 class="green-text">3. Mark as Visited</h2>
+            <p>Once you visit a location, you can mark it as visited. This feature helps you keep track of places you've been to.</p>
+            <button class="tutorial-btn" data-modal="mark-visited-modal">Learn More About Mark as Visited</button>
+        </section>
+
+        <section id="comments-feature" class="tutorial-section">
+            <h2 class="green-text">4. Comments Feature</h2>
+            <p>You can leave comments for each location. This allows you to share your thoughts or experiences with others.</p>
+            <button class="tutorial-btn" data-modal="comments-modal">Learn More About Comments</button>
+        </section>
+        
+        <section id="jazz-music" class="tutorial-section">
+            <h2 class ="green-text">5. Jazz Music Feature</h2>
+            <p>By pressing the button on the top right, you can play jazz music to enjoy while browsing around the map.</p>
+            <button class="tutorial-btn" data-modal="jazz-music-modal">Learn More About Jazz Music</button>
+        </section>
+
+        <section id="ratings-feature" class="tutorial-section">
+            <h2 class="green-text">6. Zoom feature</h2>
+            <p>By pressing the "+" or "-" button you can either zoom or zoom out of the map.</p>
+            <button class="tutorial-btn" data-modal="zoom-modal">Learn More About Ratings</button>
+        </section>
+    </main>
+
+    <div id="virtual-markers-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2>Virtual Markers of Locations</h2>
+            <p>Markers are placed on specific locations within DLSU-D. Click on any of the markers to view more details about that place.</p>
+            <img src="https://scontent.fmnl17-6.fna.fbcdn.net/v/t1.15752-9/462642654_963286178947411_7215238348844231522_n.png?_nc_cat=109&ccb=1-7&_nc_sid=9f807c&_nc_ohc=G0JVqC2rXK4Q7kNvgGBnkYq&_nc_zt=23&_nc_ht=scontent.fmnl17-6.fna&oh=03_Q7cD1QHQyOzuuMLOTZblXaxCs0UdGFWhRwjkuxo-HZXvHzDd1A&oe=67806FC7" alt="Virtual Markers" class="modal-image">
+        </div>
+    </div>
+
+    <div id="get-directions-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2>Get Directions</h2>
+            <p>When you click on a marker, you can get directions to that location via Google Maps. This makes it easy to navigate around the campus.</p>
+            <img src="https://scontent.fmnl17-1.fna.fbcdn.net/v/t1.15752-9/462647646_1690905034973082_4730362436951766389_n.png?_nc_cat=100&ccb=1-7&_nc_sid=9f807c&_nc_ohc=tUYRbq2mQIYQ7kNvgEdEAon&_nc_zt=23&_nc_ht=scontent.fmnl17-1.fna&oh=03_Q7cD1QEVg83LeUgyrA_5fQDuYKvglUBFZHr7yHZHICV-ZvVo5A&oe=678086D5" alt="Get Directions" class="modal-image">
+        </div>
+    </div>
+
+    <div id="mark-visited-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2>Mark as Visited</h2>
+            <p>You can mark a location as visited by clicking the "Mark as Visited" button. This feature helps you to view places you have already visited.</p>
+            <img src="https://scontent.fmnl17-2.fna.fbcdn.net/v/t1.15752-9/462574631_1302201680973149_6161835698071836988_n.png?_nc_cat=111&ccb=1-7&_nc_sid=9f807c&_nc_ohc=BGg3NoMTYusQ7kNvgFThp0m&_nc_zt=23&_nc_ht=scontent.fmnl17-2.fna&oh=03_Q7cD1QGqwyWcqiyCIXXRmRUtYlYWr0yipylR-TLc_jCpEsqBBQ&oe=6780768D" alt="Mark as Visited" class="modal-image">
+        </div>
+    </div>
+
+    <div id="comments-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2>Comments Feature</h2>
+            <p>Each location has a comments section where you can share your thoughts and experiences. Leave a comment to interact with others.</p>
+            <img src="https://scontent.fmnl17-3.fna.fbcdn.net/v/t1.15752-9/462587322_3773746952865149_ 3025464733817814795_n.png?_nc_cat=103&ccb=1-7&_nc_sid=9f807c&_nc_ohc=af0UYgqyV0gQ7kNvgGM38uh&_nc_zt=23&_nc_ht=scontent.fmnl17-3.fna&oh=03_Q7cD1QEL3ddKsdoPSMJHZ2y9n3WQFTWJOo0Bf-N1z2lorGT1YQ&oe=67807367" alt="Comments Feature" class="modal-image">
+        </div>
+    </div>
+
+    <div id="jazz-music-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2>Jazz Music Feature</h2>
+            <p>By pressing the button on the top right, you can play jazz music to enjoy while browsing around the map.</p>
+            <img src="https://scontent.fmnl17-3.fna.fbcdn.net/v/t1.15752-9/462558423_1297854801669974_4785556872753679472_n.png?_nc_cat=106&ccb=1-7&_nc_sid=9f807c&_nc_ohc=rFeEESF1tDoQ7kNvgH_9mfu&_nc_zt=23&_nc_ht=scontent.fmnl17-3.fna&oh=03_Q7cD1QF9bbiARjBMswoxaV9pG2nSO5rKFIeIgkBoWhuQihRaeA&oe=6780986B" alt="Jazz Music" class="modal-image">
+        </div>
+    </div>
+
+    <div id="zoom-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2>Zoom Feature</h2>
+            <p>By pressing the "+" or "-" button you can either zoom or zoom out of the map. This helps you to clearly see the pinned locations around the map.</p>
+            <img src="https://scontent.fmnl17-3.fna.fbcdn.net/v/t1.15752-9/462649902_909293964603603_3824994310877404036_n.png?_nc_cat=103&ccb=1-7&_nc_sid=9f807c&_nc_ohc=w4dHUIjfBlUQ7kNvgFBKtBy&_nc_zt=23&_nc_ht=scontent.fmnl17-3.fna&oh=03_Q7cD1QE_o-D71PLpBUNpDPzocpIstGSymtdCQoLbhMaGTNfAew&oe=67808014" alt="Zoom Feature" class="modal-image">
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+    $('.tutorial-btn').click(function() {
+        var modalId = $(this).data('modal');
+        $('#' + modalId).show();
+    });
+
+    $('.close-btn').click(function() {
+        $(this).closest('.modal').hide();
+    });
+
+    $(window).click(function(event) {
+        if ($(event.target).hasClass('modal')) {
+            $(event.target).hide();
+        }
+    });
+
+    var audio = new Audio("IMLS Webpage Music.mp3");
+    audio.loop = true;
+
+    $('#volume-icon').click(function() {
+        if (audio.paused) {
+            audio.play();
+            $(this).text("♬"); 
+        } else {
+            audio.pause();
+            $(this).text("♪"); 
+        }
+    });
+
+    $('#dark-mode-toggle').click(function() {
+        $('body').toggleClass('dark-mode');
+        $('.header-section').toggleClass('dark-mode');
+        $('.tutorial-btn').toggleClass('dark-mode');
+        $('.home-button').toggleClass('dark-mode');
+        $('.modal-content').toggleClass('dark-mode');
+        $('.close-btn').toggleClass('dark-mode');
+        $('h2').toggleClass('dark-mode');
+
+        if ($('body').hasClass('dark-mode')) {
+            $('#dark-mode-toggle').text('☼'); 
+            localStorage.setItem('dark-mode', 'enabled');
+        } else {
+            $('#dark-mode-toggle').text('☾'); 
+            localStorage.removeItem('dark-mode');
+        }
+    });
+
+
+    if (localStorage.getItem('dark-mode') === 'enabled') {
+        $('body').addClass('dark-mode');
+        $('.header-section').addClass('dark-mode');
+        $('.tutorial-btn').addClass('dark-mode');
+        $('.home-button').addClass('dark-mode');
+        $('.modal-content').addClass('dark-mode');
+        $('.close-btn').addClass('dark-mode');
+        $('h2').addClass('dark-mode');
+        $('#dark-mode-toggle').text('☼'); 
+    }
+});
+    </script>
+</body>
+</html>

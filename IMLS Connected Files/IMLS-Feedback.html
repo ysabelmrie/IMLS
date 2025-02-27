@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<!-- ICT23 Group 5 -->
+<!-- Programmed by: Regio & Tan -->
+<head>
+    <title>IKOT MO LA SALLE</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #fcfdfd;
+            color: black;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .darkbody {
+            background-color: #202020;
+            color: white;
+        }
+
+        .header-section {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: #087830;
+            color: white;
+            padding: 20px;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            box-sizing: border-box;
+        }
+
+        .header-text {
+            flex-grow: 1;
+            text-align: center;
+        }
+
+        .header-section h1 {
+            margin: 0;
+            font-size: 32px;
+        }
+
+        .header-section p {
+            margin-top: 5px;
+            font-size: 18px;
+        }
+
+        .home-button {
+            background-color: #087830;
+            color: white;
+            border: none;
+            padding: 30px; 
+            font-size: 45px; 
+            cursor: pointer;
+            position: fixed; 
+            top: 2px;
+            left: 12px;
+            z-index: 1001;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .darkbody .home-button {
+            background-color: #087830;
+            color: white;
+        }
+
+        .darkbody .home-button:hover {
+            background-color: #087830;
+        }
+
+        .home-button:hover {
+            background-color: #087830;
+        }
+
+        .rating-box, .comments-box {
+            border: 2px solid #ccc;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: rgba(255, 255, 255, 0.2);
+            margin: 20px;
+            margin-top: 150px; 
+        }
+
+        .darkbody .rating-box, .darkbody .comments-box {
+            background-color: #343434;
+            border-color: #343434;
+        }
+
+        .comments-box {
+            margin-top: 10px; 
+        }
+
+        .rating { display: flex; cursor: pointer; }
+        .star { font-size: 50px; color: gray; } 
+        
+        .notification { color: green; margin-top: 10px; }
+        #commentsList { margin-top: 20px; list-style: none; padding: 0; }
+        
+        #commentsList li {
+            padding: 15px;
+            margin-bottom: 10px;
+            background-color: rgba(255, 255, 255, 0.15); 
+            border-radius: 5px;
+            border: 1px solid rgba(255, 255, 255, 0.25); 
+            transition: background-color 0.3s;
+        }
+
+        .darkbody #commentsList li {
+            background-color: #343434; 
+            border: none;
+        }
+
+        #commentsList li hr {
+            border: none;
+            border-top: 1px solid #ccc;
+            margin: 10px 0; 
+        }
+
+        textarea {
+            width: 98%;
+            border : 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            margin-top: 10px;
+            resize: none; 
+            font-size: 16px;
+        }
+
+        .darkbody textarea {
+            border-color: #555;
+            background-color: #333;
+            color: white;
+        }
+
+        button {
+            display: inline-block;
+            padding: 15px 25px;
+            font-size: 16px;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            outline: none;
+            color: #fff;
+            background-color: #087830; 
+            border: none;
+            border-radius: 15px;
+            margin-top: 10px; 
+        }
+
+        .darkbody button {
+            background-color: #1a1a1a;
+        }
+
+        .darkbody button:hover {
+            background-color: #242424; 
+        }
+
+        button:hover { background-color: #065b2e; }
+
+        button:active {
+            background-color: #065b2e;
+            box-shadow: 0 5px #666;
+            transform: translateY(4px);
+        }
+
+        @media (max-width: 768px) {
+            .header-section h1 {
+                font-size: 26px;
+            }
+
+            .header-section p {
+                font-size: 16px;
+            }
+
+            .home-button {
+                font-size: 36px; 
+                padding: 20px;
+            }
+
+            .rating-box {
+                top: 40px;  
+                margin-bottom: 0;  
+            }
+            
+            .comments-box {
+                margin-top: 20px;  
+                margin-bottom: 0;  
+            }
+        }
+        
+        .volume-icon {
+            position: fixed;
+            top: 30px;
+            right: 35px;
+            cursor: pointer;
+            font-size: 36px;
+            z-index: 1000;
+        }
+
+        .darkmode-icon {
+            position: fixed;
+            top: 30px;
+            right: 75px;
+            cursor: pointer;
+            font-size: 36px;
+            z-index: 1000;
+        }
+        
+    </style>
+</head>
+<body>
+
+    <div class="header-section">
+        <div class="header-text">
+            <h1>RATE OUR WEB PAGE</h1>
+            <p>Your input is important to us and will help us improve user satisfaction and create a better experience for everyone.</p>
+        </div>
+        <span id="volume-icon" class="volume-icon" onclick="toggleMusic()">♬</span>
+        <span id="dark-icon" class="darkmode-icon" onclick="toggleDarkMode()">☼</span>
+    </div>
+    
+    <script src="audio.js"></script>
+
+    <a href="IMLS-MainMap.html">
+        <button class="home-button">
+            <i class="fa fa-home"></i>
+        </button>
+    </a>
+
+    <div class="rating-box">
+        <div class="rating">
+            <span class="star" data-value="1">★</span>
+            <span class="star" data-value="2">★</span>
+            <span class="star" data-value="3">★</span>
+            <span class="star" data-value="4">★</span>
+            <span class="star" data-value="5">★</span>
+        </div>
+        <textarea id="comment" placeholder="Leave a comment..." rows="4"></textarea>
+        <button id="submit">Submit</button>
+        <div class="notification" id="notification"></div>
+    </div>
+
+    <div class="comments-box">
+        <h2>Ratings & Comments:</h2>
+        <ul id="commentsList"></ul>
+    </div>
+
+    <script>
+        function toggleDarkMode() {
+            const body = document.body;
+            const isDarkMode = body.classList.toggle('darkbody');
+            const darkIcon = document.getElementById('dark-icon');
+            darkIcon.innerText = isDarkMode ? '☾' : '☼'; 
+        }
+        
+        var audio = document.createElement('audio');
+        audio.src = "IMLS Webpage Music.mp3";
+        audio.loop = true;
+
+        if (localStorage.getItem("musicState") === "playing") {
+            audio.play();
+            document.getElementById("volume-icon").innerHTML = "♬"; 
+        } else {
+            audio.pause();
+            document.getElementById("volume-icon").innerHTML = "♪"; 
+        }
+
+        function toggleMusic() {
+            if (audio.paused) {
+                audio.play();
+                document.getElementById("volume-icon").innerHTML = "♬"; 
+                localStorage.setItem("musicState", "playing");
+            } else {
+                audio.pause();
+                document.getElementBy .getElementById("volume-icon").innerHTML = "♪"; 
+                localStorage.setItem("musicState", "paused");
+            }
+        }
+        
+        const stars = document.querySelectorAll('.star');
+        let ratingValue = 0;
+        const commentsList = document.getElementById('commentsList');
+        const notification = document.getElementById('notification');
+
+        function loadComments() {
+            const comments = JSON.parse(localStorage.getItem('comments')) || [];
+            comments.forEach(({ rating, comment }) => {
+                addCommentToList(rating, comment);
+            });
+        }
+
+        function addCommentToList(rating, comment) {
+            const li = document.createElement('li');
+            li.innerHTML = `Anonymous User: ${getStarIcons(rating)} - ${comment}`; 
+            const hr = document.createElement('hr'); 
+            li.appendChild(hr); 
+            commentsList.appendChild(li);
+        }
+
+        function getStarIcons(rating) {
+            let stars = '';
+            for (let i = 1; i <= 5; i++) {
+                stars += (i <= rating) ? '★' : '☆';
+            }
+            return stars;
+        }
+
+        stars.forEach(star => {
+            star.addEventListener('click', () => {
+                ratingValue = star.getAttribute('data-value');
+            });
+
+            star.addEventListener('mouseover', () => {
+                stars.forEach(s => {
+                    s.style.color = (s.getAttribute('data-value') <= star.getAttribute('data-value')) ? 'yellow' : 'gray'; 
+                });
+            });
+
+            star.addEventListener('mouseout', () => {
+                stars.forEach(s => {
+                    s.style.color = (s.getAttribute('data-value') <= ratingValue) ? 'yellow' : 'gray'; 
+                });
+            });
+        });
+
+        document.getElementById('submit').addEventListener('click', () => {
+            const comment = document.getElementById('comment').value;
+
+            if (ratingValue > 0 && comment.trim() !== '') {
+                const comments = JSON.parse(localStorage.getItem('comments')) || [];
+                comments.push({ rating: ratingValue, comment });
+                localStorage.setItem('comments', JSON.stringify(comments));
+
+                addCommentToList(ratingValue, comment);
+                document.getElementById('comment').value = '';
+                ratingValue = 0; 
+
+                notification.textContent = 'Thank you for your feedback!';
+                setTimeout(() => {
+                    notification.textContent = '';
+                }, 3000); 
+            } else {
+                alert('Please provide a rating and a comment.');
+            }
+        });
+
+        window.onload = function() {
+            loadComments();
+        };
+        
+    </script>
+    <script src="darkmode.js"></script>
+
+</body>
+</html>

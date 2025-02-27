@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<!-- ICT23 Group 5 -->
+<!-- Programmed by: Regio, Medina, & Tan -->
+<!-- Graphics designed by: Purificacion, Pilande, & Santos -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IKOT MO LA SALLE</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0; 
+            color: white;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .darkbody {
+            background-color: #202020;
+            color: #ffffff;
+        }
+
+        .homepage {
+            background-image: url('Homepage Background.jpg');
+            background-size: cover;
+            height: 180px; 
+            padding: 20px;
+            margin-bottom: 10px;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .home-button {
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            background-color: #087830;
+            color: white;
+            border: none;
+            padding: 15px; 
+            cursor: pointer;
+            font-size: 28px;
+            border-radius: 8px;
+            z-index: 1000;
+        }
+
+        .home-button i {
+            font-size: 36px;
+        }
+
+        .home-button:hover {
+            background-color: #0a903a;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: row;
+            align-items: flex-start;
+            margin-top: 20px;
+            padding: 20px;
+            justify-content: space-between; 
+        }
+
+        .text-content {
+            flex: 1;
+            min-width: 300px;
+            padding-right: 20px; 
+        }
+
+        .about {
+            flex: 1;
+            padding: 20px;
+            color: black; 
+            text-align: justify;
+            margin-bottom: 20px;
+            position: relative; 
+        }
+
+        h2 {
+            font-size: 30px;
+        }
+
+        p {
+            font-size: 20px;
+        }
+
+        .slideshow {
+            width: 50%; 
+            margin-left: 20px;
+            position: relative;
+        }
+
+        .slideshow-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        .mySlides {
+            display: none;
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        .slider {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+        }
+
+        h1 {
+            font-family: 'Dela Gothic One', sans-serif;
+            font-size: 40px;  
+            margin-bottom: 15px;
+        }
+
+        .jeepney-gif {
+            max-width: 100%; 
+            height: auto;
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            top: 115px;
+            margin: 10px;
+            display: block; 
+        }
+
+        .volume-icon {
+            position: fixed;
+            top: 30px;
+            right: 35px;
+            cursor: pointer;
+            font-size: 36px;
+            z-index: 1000;
+        }
+
+        .darkmode-icon {
+            position: fixed;
+            top: 30px;
+            right: 75px;
+            cursor: pointer;
+            font-size: 36px;
+            z-index: 1000;
+        }
+
+        .darkbody .about {
+            background-color: #202020; 
+            color: #ffffff; 
+        }
+
+        @media (max-width: 768px) {
+            .jeepney-gif {
+                display: none;  
+            }
+
+            .homepage {
+                height: 180px; 
+            }
+
+            .home-button {
+                padding: 12px;  
+                font-size: 24px; 
+                top: 10px; 
+                left: 10px;
+            }
+
+            .text-content h1 {
+                font-size: 30px; 
+            }
+
+            .text-content p {
+                font-size: 18px; 
+            }
+
+            .about {
+                font-size: 16px; 
+            }
+
+            .slideshow {
+                width: 100%;  
+                margin-left: 0;
+                padding: 20px 0; 
+            }
+
+            .container {
+                flex-direction: column;  
+                align-items: center; 
+            }
+
+            .about {
+                width: 100%;  
+                margin-bottom: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="IMLS-MainMap.html" class="home-button"><i class="fa fa-home"></i></a>
+        <span id="volume-icon" class="volume-icon" onclick="toggleMusic()">♬</span>
+        <span id="dark-icon" class="darkmode-icon" onclick="toggleDarkMode()">☼</span>
+    </div>
+
+    <div class="homepage">
+        <div class="text-content">
+            <h1>IKOT MO LA SALLE: <span style="font-size: 35px;"><br>A PATH FOR LASALLIANS</span></h1>
+            <p class="description" style="font-size:22px;">Making Campus Navigation Easier!</p>
+        </div>
+    </div>
+	
+	<script src="audio.js"></script>
+
+    <div class="container">
+        <div class="about">
+            <h2 style="margin: 15px;">About Ikot Mo La Salle</h2>
+            <p style="margin: 15px;"><b><i><span style="color:#087830;">Ikot Mo La Salle</span></i></b> is an innovative map designed to help with campus navigation. It provides detailed information about each area, enhancing your experience by showcasing Lasallian heritage. This website aims to boost awareness and offer insights into the map's creation, helping students understand it better. Explore with Ikot Mo La Salle as your virtual guide, bridging you to the spirit of Lasallian education.</p>
+            <p style="margin: 15px; font-size: 16px;"><i>Interact and find out more!</i></p>
+            <img src="Jeepney Animation.gif" alt="Jeepney Animation" class="jeepney-gif">
+        </div>
+
+        <div class="slideshow" id="slideshow">
+            <div class="slideshow-container">
+                <div class="mySlides fade">
+                    <img src="Places-Severino De Las Alas Hall.png" class="slider" alt="Image 1">
+                </div>
+                <div class="mySlides fade">
+                    <img src="Places-National Book Store.png" class="slider" alt="Image 2">
+                </div>
+                <div class="mySlides fade">
+                    <img src="Places-HS Complex.jpeg" class="slider" alt="Image 3">
+                </div>
+                <div class="mySlides fade">
+                    <img src="Places-Gregoria Montoya Hall.jpg" class="slider" alt="Image 4">
+                </div>
+                <div class="mySlides fade">
+                    <img src="Places-CBAA.png" class="slider" alt="Image 5">
+                </div>
+                <div class="mySlides fade">
+                    <img src="Places-ICTC.png" class="slider" alt="Image 6">
+                </div>
+                <div class="mySlides fade">
+                    <img src="Places-University Square.jpg" class="slider" alt="Image 7">
+                </div>
+                <div class="mySlides fade">
+                    <img src="Places-Hotel Rafael.png" class="slider" alt="Image 8">
+                </div>
+                <a class="prev" onclick="plusSlides(-1)">❮</a>
+                <a class="next" onclick="plusSlides(1)">❯</a>
+            </div>
+            <br>
+            <div style="text-align:center">
+                <span class="dot" onclick="currentSlide(1)"></span>
+                <span class="dot" onclick="currentSlide(2)"></span>
+                <span class="dot" onclick="currentSlide(3)"></span>
+                <span class="dot" onclick="currentSlide(4)"></span>
+                <span class="dot" onclick="currentSlide(5)"></span>
+                <span class="dot" onclick="currentSlide(6)"></span>
+                <span class="dot" onclick="currentSlide(7)"></span>
+                <span class="dot" onclick="currentSlide(8)"></span>
+            </div>
+        </div>
+    </div>
+
+    <script src="audio.js"></script>
+    <script>
+        var audio = document.createElement('audio');
+        audio.src = "IMLS Webpage Music.mp3";
+        audio.loop = true;
+
+        if (localStorage.getItem("musicState") === "playing") {
+            audio.play();
+            document.getElementById("volume-icon").innerHTML = "♬"; 
+        } else {
+            audio.pause();
+            document.getElementById("volume-icon").innerHTML = "♪"; 
+        }
+
+        function toggleMusic() {
+            if (audio.paused) {
+                audio.play();
+                document.getElementById("volume-icon").innerHTML = "♬"; 
+                localStorage.setItem("musicState", "playing");
+            } else {
+                audio.pause();
+                document.getElementById("volume-icon").innerHTML = "♪"; 
+                localStorage.setItem("musicState", "paused");
+            }
+        }
+
+        var slideIndex = 1;
+
+        function showSlides() {
+            var slides = document.getElementsByClassName("mySlides");
+            var dots = document.getElementsByClassName("dot");
+            for (var i = 0; i < slides.length; i++) {
+                slides[i].style.display = "none";  
+            }
+            slideIndex++;
+            if (slideIndex > slides.length) {slideIndex = 1}    
+            for (var i = 0; i < dots.length; i++) {
+                dots[i].className = dots[i].className.replace(" active", "");
+            }
+            slides[slideIndex-1].style.display = "block";  
+            dots[slideIndex-1].className += " active";
+        }
+
+        function plusSlides(n) {
+            showSlides(slideIndex += n);
+        }
+
+        function currentSlide(n) {
+            showSlides(slideIndex = n);
+        }
+
+        setInterval(showSlides, 3000); 
+        document.addEventListener("DOMContentLoaded", function() {
+            showSlides(); 
+        });
+
+        function toggleDarkMode() {
+            const body = document.body;
+            const isDarkMode = body.classList.toggle('darkbody');
+            const darkIcon = document.getElementById('dark-icon');
+            darkIcon.innerText = isDarkMode ? '☾' : '☼'; 
+        }
+    </script>
+     <script src="darkmode.js"></script>
+</body>
+</html>

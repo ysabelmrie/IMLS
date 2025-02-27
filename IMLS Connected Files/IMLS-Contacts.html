@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<!-- ICT23 Group 5 -->
+<!-- Programmed by: Regio, Medina, & Tan -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>IKOT MO LA SALLE</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #fcfdfd;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body.darkbody {
+            background-color: #202020;
+            color: white;
+        }
+
+        .container {
+            margin: 0 auto;
+            max-width: 1200px;
+            margin-top: 145px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            padding: 0 10px;
+        }
+
+        .header-section {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: #087830;
+            color: white;
+            padding: 20px;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .header-text {
+            flex-grow: 1;
+            text-align: center;
+        }
+
+        .header-section h1 {
+            margin: 0;
+            font-size: 32px;
+        }
+
+        .header-section p {
+            margin-top: 5px;
+            font-size: 18px;
+        }
+
+        .home-button {
+            background-color: #087830;
+            color: white;
+            border: none;
+            padding: 15px 20px;
+            font-size: 24px;
+            cursor: pointer;
+            border-radius: 8px;
+            position: fixed; 
+            top: 20px;
+            left: 20px;
+            z-index: 1001;
+            display: flex;
+            align-items: center;
+        }
+
+        .home-button i {
+            font-size: 45px;
+            margin-right: 10px;
+        }
+
+        .contact-card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            width: 100%;  
+            max-width: 1200px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body.darkbody .contact-card {
+            background: #2a2a2a;
+            color: white;
+        }
+
+        .contact-card img {
+            border-radius: 50%;
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            margin-right: 20px;
+            cursor: pointer;
+        }
+
+        .contact-card h2 {
+            margin: 0;
+            font-size: 1.5em;
+        }
+
+        .contact-card p {
+            margin: 5px 0;
+        }
+
+        .additional-info {
+            display: none;
+            font-size: 14px;
+            color: #333;
+            margin-top: 10px;
+        }
+
+        body.darkbody .additional-info {
+            color: #ccc;
+        }
+
+        .see-more-info {
+            color: green;
+            font-style: italic;
+            cursor: pointer;
+            display: block;
+            margin-top: 10px;
+        }
+
+        body.darkbody .see-more-info {
+            color: #80ff80;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            width: 500px;
+            height: 500px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .close {
+            position: absolute;
+            top: 15px;
+            right: 35px;
+            color: #fff;
+            font-size: 40px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: #bbb;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            .contact-card {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+                width: 100%;
+            }
+
+            .contact-card img {
+                margin-right: 0;
+                margin-bottom: 15px;
+            }
+        }
+        
+        .volume-icon {
+            position: fixed;
+            top: 30px;
+            right: 35px;
+            cursor: pointer;
+            font-size: 36px;
+            z-index: 1000;
+        }
+
+        .darkmode-icon {
+            position: fixed;
+            top: 30px;
+            right: 75px;
+            cursor: pointer;
+            font-size: 36px;
+            z-index: 1000;
+        }
+        
+    </style>
+</head>
+<body>
+
+    <div class="header-section">
+        <div class="header-text">
+            <h1>DEVELOPERS</h1>
+            <p>Meet the team behind Ikot Mo La Salle!</p>
+        </div>
+        <span id="volume-icon" class="volume-icon" onclick="toggleMusic()">♬</span>
+        <span id="dark-icon" class="darkmode-icon" onclick="toggleDarkMode()">☼</span>
+    </div>
+    
+    <script src="audio.js"></script>
+    
+    <a href="IMLS-MainMap.html">
+        <button class="home-button">
+            <i class="fa fa-home"></i>
+        </button>
+    </a>
+
+    <div class="container">
+        <div class="contact-card">
+            <img src="Developers-Tan.jpeg" alt="Ysabella Tan" onclick="openModal(this)">
+            <div>
+                <h2>Ysabella Marie Tan</h2>
+                <p>Leader</p>
+                <p>Coder</p>
+                <p>tyo0661@dlsud.edu.ph</p>
+                <div class="additional-info">
+                    <p><i>"maganda ako"</i> Ysa, 2024</p>
+                    <p><i>bakit nga ba ako nag-ict</i></p>
+                </div>
+                <a href="#" class="see-more-info" onclick="toggleInfo(event)">See More Info</a>
+            </div>
+        </div>
+
+        <div class="contact-card">
+            <img src="Developers-Regio.jpg" alt="Jasper Regio" onclick="openModal(this)">
+            <div>
+                <h2>Jasper Ckyro Regio</h2>
+                <p>Assistant Leader</p>
+                <p>Coder</p>
+                <p>rjj1204@dlsud.edu.ph</p>
+                <div class="additional-info">
+                    <i>height:</i> 6ft under<br>
+                    <i>weight:</i> a minute <br>
+                    <p><a href="https://www.facebook.com/jasper.regio.5?mibextid=LQQJ4d" target="_blank"><i>facebook link</i></a></p> 
+                <p><i>"A doctor away keeps an apple a day"</i></p>
+                </div>
+                <a href="#" class="see-more-info" onclick="toggleInfo(event)">See More Info</a>
+            </div>
+        </div>
+        
+        <div class="contact-card">
+            <img src="Developers-Purificacion.jpg" alt="Julia Purificacion" onclick="openModal(this)">
+            <div>
+                <h2>Julia Purificacion</h2>
+                <p>Secretary</p>
+                <p>Graphic Designer</p>
+                <p>pjr1171@dlsud.edu.ph</p>
+                <div class="additional-info">
+                    <p>-mabait<br>
+                        -masipag<br>
+                        -tahimik na estudyante</p>
+                        <p><i>"Makikita mo rin yung tamang tao, pag nagkita tayo"</i></p>
+                </div>
+                <a href="#" class="see-more-info" onclick="toggleInfo(event)">See More Info</a>
+            </div>
+        </div>
+
+        <div class="contact-card">
+            <img src="Developers-Medina.jpeg" alt="RJ Medina" onclick="openModal(this)">
+            <div>
+                <h2>Romer John Medina</h2>
+                <p>Coder</p>
+                <p>mrm0670@dlsud.edu.ph</p>
+                <div class="additional-info">
+                    <p>-pro gamer<br>
+                        -very sigma<br>
+                        -7'11 volleyball player<br></p>
+                    <p><i>"Ang mahalaga ay importante basta tandaan mo always remember na ang buhay ay life."</i></p>
+                </div>
+                <a href="#" class="see-more-info" onclick="toggleInfo(event)">See More Info</a>
+            </div>
+        </div>
+
+        <div class="contact-card">
+            <img src="Developers-Santos.jpg" alt="Shannon Santos" onclick="openModal(this)">
+            <div>
+                <h2>Shannon Amber Santos</h2>
+                <p>Graphic Designer</p>
+                <p>ssd0990@dlsud.edu.ph</p>
+                <div class="additional-info">
+                    <p>-Taekwondo girlyy</p>
+                    <p><i>Insta:</i>xinyii_zhang</p>
+                    <p><i>“Basta grumaduate ka okay nayon”</i><br></p>
+                </div>
+                <a href="#" class="see-more-info" onclick="toggleInfo(event)">See More Info</a>
+            </div>
+        </div>
+
+        <div class="contact-card">
+            <img src="Developers-Pilande.png" alt="Shawn Pilande" onclick="openModal(this)">
+            <div>
+                <h2>Shawn Jezreel Pilande</h2>
+                <p>Graphic Designer</p>
+                <p>psm1101@dlsud.edu.ph</p>
+                <div class="additional-info">
+                    <p>“Asawa ni Byeon Woo-Seok”</p>
+               <p><a href="https://www.instagram.com/shawnpilande/profilecard/?igsh=MWQ4cnNhNXc2ejRpag==" target="_blank"><i>instagram link</i></a></p>
+                </div>
+                <a href="#" class="see-more-info" onclick="toggleInfo(event)">See More Info</a>
+            </div>
+        </div>
+    </div>
+
+    <div id="myModal" class="modal">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <img class="modal-content" id="img01">
+    </div>
+    <script src="darkmode.js"></script>
+    <script>
+    function toggleDarkMode() {
+        const body = document.body;
+        const isDarkMode = body.classList.toggle('darkbody');
+        const darkIcon = document.getElementById('dark-icon');
+        darkIcon.innerText = isDarkMode ? '☾' : '☼'; 
+    }
+
+    var audio = document.createElement('audio');
+    audio.src = "IMLS Webpage Music.mp3";
+    audio.loop = true;
+
+    if (localStorage.getItem("musicState") === "playing") {
+        audio.play();
+        document.getElementById("volume-icon").innerHTML = "♬"; 
+    } else {
+        audio.pause();
+        document.getElementById("volume-icon").innerHTML = "♪"; 
+    }
+
+    function toggleMusic() {
+        if (audio.paused) {
+            audio.play();
+            document.getElementById("volume-icon").innerHTML = "♬"; 
+            localStorage.setItem("musicState", "playing");
+        } else {
+            audio.pause();
+            document.getElementById("volume-icon").innerHTML = "♪"; 
+            localStorage.setItem("musicState", "paused");
+        }
+    }
+
+    function toggleInfo(event) {
+        event.preventDefault(); 
+        const link = event.target;
+        const additionalInfo = link.previousElementSibling;
+        additionalInfo.style.display = additionalInfo.style.display === 'block' ? 'none' : 'block';
+        link.textContent = additionalInfo.style.display === 'block' ? 'Show Less' : 'See More Info';
+    }
+    
+    function openModal(imgElement) {
+        const modal = document.getElementById("myModal");
+        const modalImg = document.getElementById("img01");
+        modal.style.display = "flex";
+        modalImg.src = imgElement.src;
+    }
+    
+    function closeModal() {
+        const modal = document.getElementById("myModal");
+        modal.style.display = "none";
+    }
+    
+    window.onload = function() {
+        closeModal();
+    };
+    </script>    
+</body>
+</html>
